@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Image Quiz</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 20px; }
+    img { width: 200px; height: auto; margin: 10px; cursor: pointer; }
+    .question-title { font-size: 24px; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+
+  <div id="quiz-container">
+    <div class="question-title" id="question-title"></div>
+    <div id="image-options"></div>
+  </div>
+
+  <div id="results" style="display:none;"></div>
+
+  <script>
+const questions = [
+  {
+    title: "teamwork",
+    images: [
+      "works-well-alone.jpg",
+      "works-well-in-small-groups.jpg",
+      "works-well-in-large-groups.jpg"
+    ]
+  },
+  {
+    title: "routine-oriented",
+    images: [
+      "thrives-in-dynamic-environments.jpg",
+      "comfortable-with-flexible-schedules.jpg",
+      "excels-with-structured-routines.jpg"
+    ]
+  },
+  {
+    title: "adaptability",
+    images: [
+      "skilled-at-maintaining-stability.jpg",
+      "thoughtful-when-evaluating-changes.jpg",
+      "confident-embracing-new-directions.jpg"
+    ]
+  },
+  {
+    title: "pressure-handling",
+    images: [
+      "best-in-calm-structured-settings.jpg",
+      "observant-and-responsive.jpg",
+      "calmly-takes-charge-during-pressure.jpg"
+    ]
+  },
+  {
+    title: "detail-orientation",
+    images: [
+      "efficient-with-big-picture-thinking.jpg",
+      "notices-details-when-necessary.jpg",
+      "consistently-precise-and-attentive.jpg"
+    ]
+  },
+  {
+    title: "task-completion",
+    images: [
+      "effective-at-delegating-or-shifting-tasks.jpg",
+      "diligent-and-persistent.jpg",
+      "highly-driven-to-complete-tasks.jpg"
+    ]
+  },
+  {
+    title: "initiative",
+    images: [
+      "patiently-follows-instructions.jpg",
+      "thoughtfully-assesses-before-acting.jpg",
+      "proactively-engages-and-takes-action.jpg"
+    ]
+  },
+  {
+    title: "problem-solving",
+    images: [
+      "quickly-seeks-assistance-or-input.jpg",
+      "collaborative-in-troubleshooting.jpg",
+      "independently-finds-practical-solutions.jpg"
+    ]
+  },
+  {
+    title: "organizational-style",
+    images: [
+      "flourishes-in-creative-disorder.jpg",
+      "balances-creativity-and-order.jpg",
+      "excels-at-meticulous-organization.jpg"
+    ]
+  },
+  {
+    title: "creative-approach",
+    images: [
+      "expertly-follows-proven-methods.jpg",
+      "resourceful-at-adapting-new-ideas.jpg",
+      "highly-original-and-innovative.jpg"
+    ]
+  },
+  {
+    title: "communication-style",
+    images: [
+      "strong-active-listener.jpg",
+      "effective-one-on-one-communicator.jpg",
+      "confident-leading-others.jpg"
+    ]
+  },
+  {
+    title: "structured-environment",
+    images: [
+      "thrives-with-open-ended-possibilities.jpg",
+      "thoughtfully-evaluates-guidelines.jpg",
+      "highly-effective-at-following-instructions.jpg"
+    ]
+  },
+  {
+    title: "time-management",
+    images: [
+      "performs-well-under-flexible-timelines.jpg",
+      "thoughtful-about-scheduling.jpg",
+      "precisely-manages-deadlines.jpg"
+    ]
+  },
+  {
+    title: "learning-style",
+    images: [
+      "efficient-by-mastering-familiar-methods.jpg",
+      "reflective-learner.jpg",
+      "quickly-applies-lessons-from-past-outcomes.jpg"
+    ]
+  },
+  {
+    title: "exploring-new-experiences",
+    images: [
+      "values-consistent-methods.jpg",
+      "open-minded-when-considering-novelty.jpg",
+      "eagerly-engages-with-unfamiliar-experiences.jpg"
+    ]
+  }
+];
+
+    let current = 0;
+    const answers = [];
+
+    function showQuestion(index) {
+      const question = questions[index];
+      document.getElementById('question-title').textContent = question.title;
+
+      const imageContainer = document.getElementById('image-options');
+      imageContainer.innerHTML = '';
+
+      question.images.forEach((src, idx) => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = `${String(src).replace(/-/g, ' ').replace(/\.jpg$/, '')}`;
+        img.onclick = () => {
+          answers.push(`${question.title}: ${img.alt}`);
+          current++;
+          if (current < questions.length) {
+            showQuestion(current);
+          } else {
+            showResults();
+          }
+        };
+        imageContainer.appendChild(img);
+      });
+    }
+
+function showResults() {
+  document.getElementById('quiz-container').style.display = 'none';
+  const resultDiv = document.getElementById('results');
+  resultDiv.style.display = 'block';
+  resultDiv.textContent = 'Submitting...';
+
+  fetch('http://api.tsl.rocks/coverletter?pass=NoSecret', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      preferences: answers,
+      jobPrompt: "Please make this cover letter suitable for a variety of roles. Keep it under 300 words."
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    resultDiv.textContent = data.content || 'No response.';
+  })
+  .catch(err => {
+    resultDiv.textContent = 'Error: ' + err.message;
+  });
+}
+
+
+    // Start the quiz
+    showQuestion(current);
+  </script>
+
+</body>
+</html>
