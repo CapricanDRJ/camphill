@@ -17,6 +17,7 @@
   </div>
 
   <div id="results" style="display:none;"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <script>
 const questions = [
@@ -168,6 +169,17 @@ const questions = [
         imageContainer.appendChild(img);
       });
     }
+function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  const text = document.getElementById('results').dataset.content || 'No content';
+
+  const lines = doc.splitTextToSize(text, 180);
+  doc.text(lines, 10, 10);
+  doc.save("cover_letter.pdf");
+}
+
 
 function showResults() {
   document.getElementById('quiz-container').style.display = 'none';
@@ -186,12 +198,24 @@ function showResults() {
     })
   })
   .then(res => res.json())
-  .then(data => {
-    resultDiv.textContent = data.content || 'No response.';
-  })
-  .catch(err => {
-    resultDiv.textContent = 'Error: ' + err.message;
-  });
+.then(data => {
+  const resultDiv = document.getElementById('results');
+  resultDiv.innerHTML = ''; // Clear any previous content
+
+  // Store content for PDF generation
+  resultDiv.dataset.content = data.content || 'No response.';
+
+  // Create download button
+  const btn = document.createElement('button');
+  btn.textContent = 'Download as PDF';
+  btn.onclick = downloadPDF;
+  resultDiv.appendChild(btn);
+})
+.catch(err => {
+  const resultDiv = document.getElementById('results');
+  resultDiv.textContent = 'Error: ' + err.message;
+});
+
 }
 
 
