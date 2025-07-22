@@ -187,7 +187,7 @@ function showResults() {
   resultDiv.style.display = 'block';
   resultDiv.textContent = 'Submitting...';
 
-  fetch('http://api.tsl.rocks/coverletter?pass=NoSecret', {
+  fetch('https://api.tsl.rocks/coverletter?pass=NoSecret', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
