@@ -153,22 +153,34 @@ const questions = [
       const imageContainer = document.getElementById('image-options');
       imageContainer.innerHTML = '';
 
-      question.images.forEach((src, idx) => {
-        const img = document.createElement('img');
-        img.src = src;
-        img.alt = `${String(src).replace(/-/g, ' ').replace(/\.png$/, '')}`;
-        img.onclick = () => {
-          answers.push(`${question.title}: ${img.alt}`);
-          current++;
-          if (current < questions.length) {
-            showQuestion(current);
-          } else {
-            showResults();
-          }
-        };
-        imageContainer.appendChild(img);
-      });
-    }
+  question.images.forEach((src) => {
+    const wrapper = document.createElement('div');
+    wrapper.style.display = 'inline-block';
+    wrapper.style.margin = '10px';
+
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = src.replace(/-/g, ' ').replace(/\.png$/, '');
+
+    const caption = document.createElement('div');
+    caption.textContent = img.alt;
+    caption.style.marginTop = '5px';
+
+    img.onclick = () => {
+      answers.push(`${question.title}: ${img.alt}`);
+      current++;
+      if (current < questions.length) {
+        showQuestion(current);
+      } else {
+        showResults();
+      }
+    };
+
+    wrapper.appendChild(img);
+    wrapper.appendChild(caption);
+    imageContainer.appendChild(wrapper);
+  });
+
 function downloadPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
