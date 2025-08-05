@@ -143,15 +143,15 @@ const questions = [
   }
 ];
 
-    let current = 0;
-    const answers = [];
+let current = 0;
+const answers = [];
 
-    function showQuestion(index) {
-      const question = questions[index];
-      document.getElementById('question-title').textContent = question.title;
+function showQuestion(index) {
+  const question = questions[index];
+  document.getElementById('question-title').textContent = question.title;
 
-      const imageContainer = document.getElementById('image-options');
-      imageContainer.innerHTML = '';
+  const imageContainer = document.getElementById('image-options');
+  imageContainer.innerHTML = '';
 
   question.images.forEach((src) => {
     const wrapper = document.createElement('div');
@@ -180,7 +180,7 @@ const questions = [
     wrapper.appendChild(caption);
     imageContainer.appendChild(wrapper);
   });
-
+}
 function downloadPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
