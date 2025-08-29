@@ -177,8 +177,7 @@ function showQuestion(index) {
   caption.onclick = (e) => {
     e.stopPropagation();
     if ('speechSynthesis' in window) {
-      const pausedText = textContent.replace(/\s+/g, ', '); // Replace spaces with commas
-      const utterance = new SpeechSynthesisUtterance(pausedText);
+      const utterance = new SpeechSynthesisUtterance(textContent);
       utterance.rate = 0.8;
       speechSynthesis.speak(utterance);
     }
