@@ -169,6 +169,17 @@ function showQuestion(index) {
     caption.textContent = img.alt.charAt(0).toUpperCase() + img.alt.slice(1);
     caption.style.marginTop = '5px';
     caption.style.fontSize = '14px';
+    caption.style.cursor = 'pointer';
+    caption.style.color = '#0066cc';
+    caption.title = 'Click to hear this read aloud';
+
+    caption.onclick = (e) => {
+      e.stopPropagation(); // Prevent triggering the image click
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(caption.textContent);
+        speechSynthesis.speak(utterance);
+      }
+    };
 
     img.onclick = () => {
       answers.push(`${question.title}: ${img.alt}`);
