@@ -166,7 +166,8 @@ function showQuestion(index) {
     img.alt = src.replace(/-/g, ' ').replace(/\.png$/, '');
 
     const caption = document.createElement('div');
-    caption.textContent = img.alt.charAt(0).toUpperCase() + img.alt.slice(1);
+    const textContent = img.alt.charAt(0).toUpperCase() + img.alt.slice(1);
+    caption.textContent = '🔈' + textContent;
     caption.style.marginTop = '5px';
     caption.style.fontSize = '14px';
     caption.style.cursor = 'pointer';
@@ -176,7 +177,7 @@ function showQuestion(index) {
   caption.onclick = (e) => {
     e.stopPropagation();
     if ('speechSynthesis' in window) {
-      const pausedText = caption.textContent.replace(/\s+/g, ', '); // Replace spaces with commas
+      const pausedText = textContent.replace(/\s+/g, ', '); // Replace spaces with commas
       const utterance = new SpeechSynthesisUtterance(pausedText);
       utterance.rate = 0.8;
       speechSynthesis.speak(utterance);
