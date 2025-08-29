@@ -157,6 +157,9 @@ function showQuestion(index) {
     const wrapper = document.createElement('div');
     wrapper.style.display = 'inline-block';
     wrapper.style.margin = '10px';
+    wrapper.style.border = '1px solid #ccc';
+    wrapper.style.padding = '10px';
+    wrapper.style.borderRadius = '8px';
 
     const img = document.createElement('img');
     img.src = src;
@@ -165,6 +168,7 @@ function showQuestion(index) {
     const caption = document.createElement('div');
     caption.textContent = img.alt.charAt(0).toUpperCase() + img.alt.slice(1);
     caption.style.marginTop = '5px';
+    caption.style.fontSize = '14px';
 
     img.onclick = () => {
       answers.push(`${question.title}: ${img.alt}`);
