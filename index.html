@@ -173,13 +173,15 @@ function showQuestion(index) {
     caption.style.color = '#0066cc';
     caption.title = 'Click to hear this read aloud';
 
-    caption.onclick = (e) => {
-      e.stopPropagation(); // Prevent triggering the image click
-      if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(caption.textContent);
-        speechSynthesis.speak(utterance);
-      }
-    };
+  caption.onclick = (e) => {
+    e.stopPropagation();
+    if ('speechSynthesis' in window) {
+      const pausedText = caption.textContent.replace(/\s+/g, ', '); // Replace spaces with commas
+      const utterance = new SpeechSynthesisUtterance(pausedText);
+      utterance.rate = 0.8;
+      speechSynthesis.speak(utterance);
+    }
+  };
 
     img.onclick = () => {
       answers.push(`${question.title}: ${img.alt}`);
